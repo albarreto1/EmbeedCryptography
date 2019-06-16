@@ -31,7 +31,7 @@ class PiStats(object):
         elif i == 1: # Free line 
           self.free_memory = int(line.strip("MemFree: \tkB\n")) / 1024
         elif i == 3: # Cached line
-          self.cached_memory = int(line.strip("Cached: \tkB\n")) / 1024
+          self.cached_memory = int(line.strip("Cached Buffers: \tkB\n")) / 1024
 
     self.lastCPUInfo['total'] = self.currentCPUInfo['total']
     self.lastCPUInfo['active'] = self.currentCPUInfo['active']
