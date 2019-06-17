@@ -30,7 +30,7 @@ class PiStats(object):
           self.total_memory = int(line.strip("MemTotal: \tkB\n")) / 1024
         elif i == 1: # Free line 
           self.free_memory = int(line.strip("MemFree: \tkB\n")) / 1024
-        elif i == 3: # Cached line
+        elif i == 4: # Cached line
           self.cached_memory = int(line.strip("Cached: \tkB\n")) / 1024
 
     self.lastCPUInfo['total'] = self.currentCPUInfo['total']
@@ -59,24 +59,26 @@ class PiStats(object):
   def get_cpu_info(self):
     return self.currentCPUInfo
 
-
-stats = PiStats()
-stats.update_stats()
-meminfo = stats.get_memory_info()
-
-file = open("CPUusage.txt", 'w')
-file.write("total\tused\tfree\tcached")
-file.write("%i\t%i\t%i\t%i"%(meminfo['total'],meminfo['used'],meminfo['free'],meminfo['cached']))
-file.write("Memory Usage:\t%i%%"%(meminfo['percent']))
-file.write("\n")
-
-try:
-  while True:
-    cpu_info = stats.get_cpu_info()
-    file.write("CPU Usage:\t%i%%"%(cpu_info['percent']))
-    time.sleep(2)
-    stats.update_stats()
-except KeyboardInterrupt:
-  file.close()
-  print ("Exiting.\n")
-  sys.exit(0)
+    def cpuusage_main(title):
+        stats = PiStats()
+        stats.update_stats()
+        meminfo = stats.get_memory_info()
+        
+        file = open(title, "w")
+        file.write("total\tused\tfree\tcached\n")
+        file.write("%i\t%i\t%i\t%i\n"%(meminfo['total'],meminfo['used'],meminfo['free'],meminfo['cached']))
+        file.write("Memory Usage:\t%i%%"%(meminfo['percent']))
+        file.write("\n")
+        file.write("CPU Usage:\n")
+        
+        try:
+          while True:
+            cpu_info = stats.get_cpu_info()
+            file.write("\t%i%%\n"%(cpu_info['percent']))
+            time.sleep(2);
+            stats.update_stats()
+        except KeyboardInterrupt:
+          file.close()
+          print ("Exiting.\n")
+          file.close()
+          sys.exit(0)
