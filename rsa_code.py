@@ -1,8 +1,8 @@
 import binascii
 import time
+from Crypto.PublicKey import RSA
 
-
-def rsa_code(message = 'Rosetta Code!'):
+def rsa_code(message = 'Analise de desempe'):
 
 	n = 9516311845790656153499716760847001433441357    # p*q = modulus
 	e = 65537
@@ -32,3 +32,33 @@ def rsa_code(message = 'Rosetta Code!'):
 	print('message                 ', binascii.unhexlify(hex(decrypted_text)[2:]).decode())     # [2:] slicing, to strip the 0x part 
 
 	return exec_time
+
+
+
+def rsa_code2(key_size = 2048, message = 'mensagem limpa'):
+    start_time = time.time()
+
+    key = RSA.generate(key_size)
+    #private_key = key.exportKey()
+    #print(private_key)
+    #file_out = open("private.pem", "wb")
+    #file_out.write(private_key)
+    #public_key = key.publickey().exportKey()
+    #print(public_key)
+    #file_out = open("receiver.pem", "wb")
+    #file_out.write(public_key)
+
+    hex_data   = binascii.hexlify(message.encode())
+
+    plain_text = int(hex_data, 16)
+    print('plain text integer      ', plain_text)
+
+    enc = key.encrypt(plain_text, 123456)
+    dec = key.decrypt(enc)
+
+    exec_time = time.time() - start_time
+
+    print('message                 ', binascii.unhexlify(hex(dec)[2:]).decode())     # [2:] slicing, to strip the 0x part 
+
+    return exec_time
+
