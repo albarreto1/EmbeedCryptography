@@ -64,7 +64,7 @@ stats = PiStats()
 stats.update_stats()
 meminfo = stats.get_memory_info()
 
-file = open("CPUusage.txt", 'w')
+file = open("CPUusage.txt", "w")
 file.write("total\tused\tfree\tcached")
 file.write("%i\t%i\t%i\t%i"%(meminfo['total'],meminfo['used'],meminfo['free'],meminfo['cached']))
 file.write("Memory Usage:\t%i%%"%(meminfo['percent']))
@@ -74,9 +74,10 @@ try:
   while True:
     cpu_info = stats.get_cpu_info()
     file.write("CPU Usage:\t%i%%"%(cpu_info['percent']))
-    time.sleep(2)
+    time.sleep(2);
     stats.update_stats()
 except KeyboardInterrupt:
   file.close()
   print ("Exiting.\n")
+  file.close()
   sys.exit(0)
