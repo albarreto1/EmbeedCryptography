@@ -46,3 +46,5 @@ def rsa_main():
     FILE.write('%f\t%f\t%f\t%f\t%f\n'%(mtime[0], mtime[1], mtime[2], mtime[3], mtime[4]))
     FILE.close()
     
+rsa_main()
+    
