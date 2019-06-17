@@ -13,14 +13,15 @@ def doRSA(arch = 'msg2.txt', key_size = 2048):
     support = int(key_size/8)
     
     buffer = []
-    message = FILE.readline()
+    message = []
+    message = message + FILE.readlines()
     print(message)
-    while(len(message) > support):
-        buffer.append(message[:support-1])
-        message = message[support:]
-    buffer.append(message)
-    FILE.close()
-
+    for line in message:
+        while(len(line) > support):
+            buffer.append(line[:support-1])
+            line = line[support:]
+        buffer.append(line)
+        FILE.close()
     
     total = []
     while (len(total) < 30):
@@ -30,12 +31,13 @@ def doRSA(arch = 'msg2.txt', key_size = 2048):
         total.append(t)
     return s.mean(total)
 
-msg = ['msg2.txt', 'msg3.txt', 'msg4.txt']
-mtime = []
-for m in msg:
-    mtime.append(doRSA(m))
-FILE = open('rsa_results.txt', 'a')
-FILE.write('Message 2\tMessage 3\tMessage 4\n')
-FILE.write('%f\t%f\t%f'%(mtime[0], mtime[1], mtime[2]))
-FILE.close()
+def rsa_main():
+    msg = ['msg1.txt', 'msg2.txt', 'msg3.txt', 'msg4.txt']
+    mtime = []
+    for m in msg:
+        mtime.append(doRSA(m))
+    FILE = open('rsa_results.txt', 'a')
+    FILE.write('Message 1\tMessage 2\tMessage 3\tMessage 4\n')
+    FILE.write('%f\t%f\t%f\t%f\n'%(mtime[0], mtime[1], mtime[2], mtime[3]))
+    FILE.close()
     

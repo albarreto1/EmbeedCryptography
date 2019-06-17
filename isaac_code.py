@@ -2,6 +2,7 @@ import random
 import collections
 import binascii
 import time
+import statistics as s
 
 INT_MASK = 0xFFFFFFFF       # we use this to emulate 32-bit overflow semantics by masking off higher bits after operations
  
@@ -182,20 +183,49 @@ def isaac_code(message ='hello world', key = 'secret key'):
 
     start_time = time.time()
 
-    isaac_random = IsaacRandom(key)
+    FILE = open('isaac_keys.txt', 'r')
+    keys = FILE.readlines()
+    rindex = random.randint(0, len(keys)-1)
+
+    isaac_random = IsaacRandom(keys[rindex])
     vernam_encoded = isaac_random.vernam(message.encode('ascii'))
     caesar_encoded = isaac_random.caesar(IsaacRandom.ENCIPHER, message.encode('ascii'), MOD, START)
-    isaac_random.seed(key)
+    isaac_random.seed(keys[rindex])
     vernam_decoded = isaac_random.vernam(vernam_encoded).decode('ascii')
     caesar_decoded = isaac_random.caesar(IsaacRandom.DECIPHER, caesar_encoded, MOD, START).decode('ascii')
  
     exec_time = time.time() - start_time
 
     print('Message:', message)
-    print('Key    :', key)
+    print('Key    :', keys[rindex])
     print('XOR    :', hexify(vernam_encoded))
     print('XOR dcr:', vernam_decoded)
     print('MOD    :', hexify(caesar_encoded))
     print('MOD dcr:', caesar_decoded)
 
     return exec_time
+
+def doISAAC(arch = 'msg2.txt'):
+    FILE = open(arch, "r")
+    message = FILE.readlines()
+    FILE.close()
+    total = []
+    buffer = []
+    for line in message:
+    	buffer = buffer + [line]
+    while (len(total) < 30):
+    	t = isaac_code(message = line)
+    	total.append(t)
+    return s.mean(total)
+
+def isaac_main():
+	msg = ['msg1.txt', 'msg2.txt', 'msg3.txt', 'msg4.txt']
+	mtime = []
+	for m in msg:
+		mtime.append(doISAAC(m))
+	FILE = open('isaac_results.txt', 'a')
+	FILE.write('Message 1\tMessage 2\tMessage 3\tMessage 4\n')
+	FILE.write('%f\t%f\t%f\t%f\n'%(mtime[0], mtime[1], mtime[2], mtime[3]))
+	FILE.close()
+
+isaac_main()

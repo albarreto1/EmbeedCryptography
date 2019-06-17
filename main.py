@@ -1,13 +1,9 @@
-from rsa_code import *
-from isaac_code import *
-from fernet_code import *
+from rsa_start import rsa_main
+from isaac_code import isaac_main
+from fernet_code import fernet_main
 
-rsa = rsa_code('analise')
+rsa_main()
+fernet_main()
+isaac_main()
 
-fernet = fernet_code(message = 'analise de desempenho'.encode())
-
-fernet2 = fernet_code(password = 'projeto final'.encode(), message = 'analise de desempenho'.encode())
-
-isaac = isaac_code(message = 'analise de desempenho', key = 'projeto final')
-
-print(rsa, fernet, fernet2, isaac)
+print('fim do experimento')
