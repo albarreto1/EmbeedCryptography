@@ -51,14 +51,14 @@ def rsa_code2(key_size = 2048, message = 'mensagem limpa'):
     hex_data   = binascii.hexlify(message.encode())
 
     plain_text = int(hex_data, 16)
-    print('plain text integer      ', plain_text)
+    print('Plain text integer:\n\n', plain_text)
 
     enc = key.encrypt(plain_text, 123456)
     dec = key.decrypt(enc)
 
     exec_time = time.time() - start_time
 
-    print('message                 ', binascii.unhexlify(hex(dec)[2:]).decode())     # [2:] slicing, to strip the 0x part 
+    print('Message:\n\n', binascii.unhexlify(hex(dec)[2:]).decode())     
+    # [2:] slicing, to strip the 0x part 
 
     return exec_time
-
